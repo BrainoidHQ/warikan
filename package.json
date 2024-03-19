@@ -5,6 +5,9 @@
   "private": true,
   "author": "yoseio <yoseio@brainoid.dev>",
   "license": "MIT",
+  "workspaces": [
+    "client"
+  ],
   "scripts": {
     "prepare": "husky",
     "commitlint": "commitlint --edit"

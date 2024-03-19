@@ -1,0 +1,40 @@
+name: server
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+    paths-ignore:
+      - "package.json"
+      - "package-lock.json"
+      - "client/**"
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: dtolnay/rust-toolchain@stable
+      with:
+        components: rustfmt, clippy
+    - uses: Swatinem/rust-cache@v2
+    - run: cargo check -p server
+    - run: cargo fmt -p server -- --check
+    - run: cargo clippy -p server -- -D warnings
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: dtolnay/rust-toolchain@stable
+      with:
+        components: llvm-tools-preview
+    - uses: Swatinem/rust-cache@v2
+    - uses: taiki-e/install-action@nextest
+    - uses: taiki-e/install-action@cargo-llvm-cov
+    - uses: supercharge/mongodb-github-action@1.10.0
+    - run: cargo llvm-cov nextest --lcov --output-path lcov.info
+    - uses: codecov/codecov-action@v3
+      with:
+        files: lcov.info

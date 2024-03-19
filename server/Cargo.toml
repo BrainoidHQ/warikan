@@ -1,0 +1,35 @@
+[package]
+name = "server"
+version = "0.1.0"
+authors = ["yoseio <yoseio@brainoid.dev>"]
+edition = "2021"
+repository = "https://github.com/yoseio/warikan.git"
+license = "MIT"
+
+[dependencies]
+async-graphql = { version = "7.0", features = ["chrono"] }
+async-graphql-axum = "7.0"
+async-trait = "0.1"
+axum = "0.7"
+axum-extra = { version = "0.9", features = ["typed-header"] }
+chrono = { version = "0.4", features = ["serde"] }
+clap = { version = "4.4", features = ["derive", "env"] }
+dotenvy = "0.15"
+futures = "0.3"
+jsonwebtoken = "9.0"
+mongodb = { version = "2.8", features = ["tokio-runtime"] }
+nanoid = "0.4"
+reqwest = { version = "0.11", features = ["json"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+shaku = "0.6"
+thiserror = "1.0"
+tokio = { version = "1.8", features = ["full"] }
+url = "2.5"
+
+[dev-dependencies]
+fake = { version = "2.9", features = ["derive", "chrono"] }
+indoc = "2.0"
+itertools = "0.12"
+mockall = "0.12"
+rand = "0.8"
