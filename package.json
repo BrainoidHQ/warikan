@@ -1,0 +1,25 @@
+{
+  "name": "warikan",
+  "version": "0.1.0",
+  "description": "",
+  "private": true,
+  "author": "yoseio <yoseio@brainoid.dev>",
+  "license": "MIT",
+  "scripts": {
+    "prepare": "husky",
+    "commitlint": "commitlint --edit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BrainoidHQ/warikan.git"
+  },
+  "bugs": {
+    "url": "https://github.com/BrainoidHQ/warikan/issues"
+  },
+  "homepage": "https://github.com/BrainoidHQ/warikan#readme",
+  "devDependencies": {
+    "@commitlint/cli": "^19.2.1",
+    "@commitlint/config-conventional": "^19.1.0",
+    "husky": "^9.0.11"
+  }
+}
