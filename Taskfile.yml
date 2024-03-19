@@ -1,0 +1,27 @@
+version: '3'
+
+tasks:
+  server:dev:
+    dir: 'server'
+    cmds:
+      - cargo watch -x run
+
+  server:test:
+    cmds:
+      - cargo llvm-cov nextest --html --all --no-fail-fast
+
+  server:lint:
+    dir: 'server'
+    cmds:
+      - cargo check
+      - cargo clippy
+
+  server:fmt:
+    dir: 'server'
+    cmds:
+      - cargo fmt
+
+  server:doc:
+    dir: 'server'
+    cmds:
+      - cargo doc
