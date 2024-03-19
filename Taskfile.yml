@@ -1,6 +1,17 @@
 version: '3'
 
 tasks:
+  client:dev:
+    dir: 'client'
+    cmds:
+      - npm run dev
+
+  client:lint:
+    dir: 'client'
+    cmds:
+      - npm run typecheck
+      - npm run lint
+
   server:dev:
     dir: 'server'
     cmds:
