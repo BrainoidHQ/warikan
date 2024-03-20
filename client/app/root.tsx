@@ -1,5 +1,5 @@
 import { NextUIProvider } from "@nextui-org/react";
-import { LinksFunction } from "@remix-run/node";
+import { type LinksFunction } from "@vercel/remix";
 import {
   Links,
   Meta,
@@ -8,6 +8,7 @@ import {
   ScrollRestoration,
   useNavigate,
 } from "@remix-run/react";
+import { Analytics } from '@vercel/analytics/react';
 import stylesheet from "~/tailwind.css?url";
 import { Container } from "~/components/Container";
 
@@ -31,6 +32,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
           {children}
         </NextUIProvider>
         <ScrollRestoration />
+        <Analytics />
         <Scripts />
       </body>
     </html>

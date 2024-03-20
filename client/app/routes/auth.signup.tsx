@@ -1,4 +1,4 @@
-import { type ActionFunction, type LoaderFunction, redirect } from "@remix-run/node";
+import { type ActionFunction, type LoaderFunction, redirect } from "@vercel/remix";
 import { Form, useActionData } from "@remix-run/react";
 
 import { getFormProps, getInputProps, useForm } from "@conform-to/react";

@@ -1,4 +1,4 @@
-import { createCookieSessionStorage } from "@remix-run/node";
+import { createCookieSessionStorage } from "@vercel/remix";
 import { SESSION_SECRET } from "~/services/constants.server";
 
 export const sessionStorage = createCookieSessionStorage({

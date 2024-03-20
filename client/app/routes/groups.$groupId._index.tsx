@@ -1,4 +1,4 @@
-import { type LoaderFunctionArgs, json } from "@remix-run/node";
+import { type LoaderFunctionArgs, json } from "@vercel/remix";
 import { Form, useLoaderData, useRouteLoaderData } from "@remix-run/react";
 
 import { compareDesc, format } from "date-fns";

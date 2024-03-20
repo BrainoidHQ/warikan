@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { type LoaderFunctionArgs, type ActionFunction, json, redirect } from "@remix-run/node";
+import { type LoaderFunctionArgs, type ActionFunction, json, redirect } from "@vercel/remix";
 import { Form, useActionData, useLoaderData, useRouteLoaderData } from "@remix-run/react";
 import { useDebounceSubmit } from "remix-utils/use-debounce-submit";
 

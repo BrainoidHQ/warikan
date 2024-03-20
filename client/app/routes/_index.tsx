@@ -1,4 +1,4 @@
-import { type LoaderFunctionArgs, json, redirect } from "@remix-run/node";
+import { type LoaderFunctionArgs, json, redirect } from "@vercel/remix";
 import { useLoaderData } from "@remix-run/react";
 
 import { compareDesc, format } from "date-fns";

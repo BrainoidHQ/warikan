@@ -1,4 +1,4 @@
-import { SerializeFrom } from "@remix-run/server-runtime"
+import { type SerializeFrom } from "@vercel/remix"
 import { z } from 'zod';
 import { GetPaymentDetailQuery } from '~/gql/graphql';
 

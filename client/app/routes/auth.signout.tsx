@@ -1,4 +1,4 @@
-import { type ActionFunction, redirect } from "@remix-run/node";
+import { type ActionFunction, redirect } from "@vercel/remix";
 import { AUTH0_CLIENT_ID, AUTH0_LOGOUT_URL, AUTH0_RETURN_TO_URL } from '~/services/constants.server';
 import { getSession, destroySession } from "~/services/session.server";
 

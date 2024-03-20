@@ -1,4 +1,4 @@
-import { SerializeFrom } from "@remix-run/server-runtime";
+import { type SerializeFrom } from "@vercel/remix";
 import { useDebounceSubmit } from "remix-utils/use-debounce-submit";
 
 import { type ControlButtonProps } from "@conform-to/dom"

@@ -1,4 +1,4 @@
-import { type ActionFunction } from "@remix-run/node";
+import { type ActionFunction } from "@vercel/remix";
 import { Form } from "@remix-run/react";
 
 import { Button } from "@nextui-org/react";

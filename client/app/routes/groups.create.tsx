@@ -1,4 +1,4 @@
-import { ActionFunction, redirect } from "@remix-run/node";
+import { type ActionFunction, redirect } from "@vercel/remix";
 
 import { GraphQLClient } from 'graphql-request';
 import { parseWithZod } from '@conform-to/zod';

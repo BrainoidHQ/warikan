@@ -1,4 +1,4 @@
-import { type LoaderFunctionArgs, json } from "@remix-run/node";
+import { type LoaderFunctionArgs, json } from "@vercel/remix";
 
 import { GraphQLClient } from 'graphql-request';
 import invariant from "tiny-invariant";
