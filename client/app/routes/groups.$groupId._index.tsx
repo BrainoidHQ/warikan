@@ -1,4 +1,5 @@
-import { Form, useRouteLoaderData } from "@remix-run/react";
+import { type LoaderFunctionArgs, json } from "@remix-run/node";
+import { Form, useLoaderData, useRouteLoaderData } from "@remix-run/react";
 
 import { compareDesc, format } from "date-fns";
 import invariant from "tiny-invariant";
@@ -19,11 +20,22 @@ import { Share2Icon, GearIcon, PlusIcon } from '@radix-ui/react-icons'
 import { AppBar } from "~/components/AppBar";
 import { loader as groupLoader } from "~/routes/groups.$groupId";
 import { UnimplementedModal } from "~/components/UnimplementedModal";
+import { authenticator } from '~/services/auth.server';
+
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const user = await authenticator.isAuthenticated(request, {
+    failureRedirect: '/auth/signin',
+  });
+
+  return json({ user });
+};
 
 export default function GroupDetail() {
   const groupLoaderData = useRouteLoaderData<typeof groupLoader>("routes/groups.$groupId");
   invariant(groupLoaderData?.group, "Missing data");
   const group = groupLoaderData.group;
+
+  const { user } = useLoaderData<typeof loader>();
 
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
 
@@ -53,7 +65,19 @@ export default function GroupDetail() {
           </CardHeader>
           <Divider />
           <CardBody>
-            <p>未実装の機能です。しばらく待ってね❤️</p>
+            <Listbox>
+              {
+                group
+                  .warikan
+                  .filter((warikan) => warikan.from.id === user.id || warikan.to.id === user.id)
+                  .map((warikan) => warikan.from.id === user.id ? `${warikan.to.name}に${warikan.amount}円おくる` : `${warikan.from.name}から${warikan.amount}円もらう`)
+                  .map((message) => (
+                    <ListboxItem key={message}>
+                      {message}
+                    </ListboxItem>
+                  ))
+              }
+            </Listbox>
           </CardBody>
         </Card>
 

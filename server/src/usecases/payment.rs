@@ -1,5 +1,5 @@
 use crate::{
-    entities::{Amount, AuthState, GroupID, Payment, PaymentID, UserID},
+    entities::{warikan, Amount, AuthState, GroupID, Payment, PaymentID, UserID, Warikan},
     usecases::{UseCase, UseCaseError},
 };
 use async_graphql::InputObject;
@@ -46,6 +46,15 @@ impl UseCase {
         } else {
             Err(UseCaseError::NotFound)?
         }
+    }
+
+    pub async fn warikan_by_group(
+        &self,
+        auth: &AuthState,
+        id: &GroupID,
+    ) -> Result<Vec<Warikan>, UseCaseError> {
+        let payments = self.get_payments_by_group(auth, id).await?;
+        warikan(&payments).ok_or(UseCaseError::BadRequest)
     }
 }
 

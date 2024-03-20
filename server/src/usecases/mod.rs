@@ -24,6 +24,9 @@ impl UseCase {
 
 #[derive(Debug, Error, PartialEq, Eq)]
 pub enum UseCaseError {
+    #[error("400 bad request")]
+    BadRequest,
+
     #[error("401 unauthorized")]
     Unauthorized,
 

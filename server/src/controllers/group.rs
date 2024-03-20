@@ -1,5 +1,5 @@
 use crate::{
-    entities::{AuthState, Group, GroupID, Notification, Payment, User, UserID},
+    entities::{AuthState, Group, GroupID, Notification, Payment, User, UserID, Warikan},
     usecases::{CreateGroupInput, DeleteGroupInput, UpdateGroupInput, UseCase},
 };
 use async_graphql::{Context, Object};
@@ -39,6 +39,33 @@ impl Group {
         let usecase = ctx.data::<UseCase>()?;
         let auth = ctx.data::<AuthState>()?;
         Ok(usecase.get_notifications_by_group(auth, &self.id).await?)
+    }
+
+    async fn warikan(&self, ctx: &Context<'_>) -> async_graphql::Result<Vec<Warikan>> {
+        let usecase = ctx.data::<UseCase>()?;
+        let auth = ctx.data::<AuthState>()?;
+        Ok(usecase.warikan_by_group(auth, &self.id).await?)
+    }
+}
+
+#[Object]
+impl Warikan {
+    async fn from(&self, ctx: &Context<'_>) -> async_graphql::Result<User> {
+        let usecase = ctx.data::<UseCase>()?;
+        let auth = ctx.data::<AuthState>()?;
+        let user = usecase.get_user(auth, &self.from).await?;
+        Ok(user)
+    }
+
+    async fn to(&self, ctx: &Context<'_>) -> async_graphql::Result<User> {
+        let usecase = ctx.data::<UseCase>()?;
+        let auth = ctx.data::<AuthState>()?;
+        let user = usecase.get_user(auth, &self.to).await?;
+        Ok(user)
+    }
+
+    async fn amount(&self) -> i32 {
+        self.amount
     }
 }
 
