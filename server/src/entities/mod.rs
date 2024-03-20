@@ -3,12 +3,14 @@ mod group;
 mod notification;
 mod payment;
 mod user;
+mod warikan;
 
 pub use auth::*;
 pub use group::*;
 pub use notification::*;
 pub use payment::*;
 pub use user::*;
+pub use warikan::*;
 
 use thiserror::Error;
 

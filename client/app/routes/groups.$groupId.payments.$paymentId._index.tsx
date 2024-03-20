@@ -94,6 +94,7 @@ export default function PaymentDetail() {
         debounceTimeout: 0,
       })
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formRef, lastResult, form.initialValue])
 
   const {isOpen, onOpen, onOpenChange} = useDisclosure();

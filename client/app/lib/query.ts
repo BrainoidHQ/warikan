@@ -46,6 +46,17 @@ export const GetGroupDetailQuery = graphql(`
           amount
         }
       }
+      warikan {
+        from {
+          id
+          name
+        }
+        to {
+          id
+          name
+        }
+        amount
+      }
     }
   }
 `);

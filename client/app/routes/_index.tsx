@@ -67,16 +67,6 @@ export default function App() {
 
       <div className="flex flex-col gap-4">
         <Card shadow="sm">
-          <CardHeader>
-            <h3>やること</h3>
-          </CardHeader>
-          <Divider />
-          <CardBody>
-            <p>未実装の機能です。しばらく待ってね❤️</p>
-          </CardBody>
-        </Card>
-
-        <Card shadow="sm">
           <CardHeader className="justify-between">
             <h3>グループ一覧</h3>
             <Button isIconOnly size="sm" variant="bordered" color="primary" onPress={onCreateGroupModalOpen}>
