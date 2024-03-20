@@ -1,4 +1,4 @@
-import { graphql } from '~/gql';
+import { graphql } from "~/gql";
 
 export const GetUserDetailQuery = graphql(`
   query GetUserDetail($id: ID!) {
@@ -91,7 +91,7 @@ export const GetPaymentDetailQuery = graphql(`
       }
     }
   }
-`)
+`);
 
 export const CreatePaymentMutation = graphql(`
   mutation CreatePayment($input: CreatePaymentInput!) {
@@ -99,7 +99,7 @@ export const CreatePaymentMutation = graphql(`
       id
     }
   }
-`)
+`);
 
 export const UpdatePaymentMutation = graphql(`
   mutation UpdatePayment($input: UpdatePaymentInput!) {
@@ -107,4 +107,4 @@ export const UpdatePaymentMutation = graphql(`
       id
     }
   }
-`)
+`);

@@ -17,33 +17,31 @@ import { action } from "~/routes/groups.create";
 import { CreateGroupMutationSchema } from "~/lib/form";
 
 export interface CreateGroupModalProps {
-  isOpen: boolean,
-  onOpenChange: () => void,
+  isOpen: boolean;
+  onOpenChange: () => void;
 }
 
 export function CreateGroupModal(props: CreateGroupModalProps) {
   const lastResult = useActionData<typeof action>();
   const [form, fields] = useForm({
-		lastResult,
-		constraint: getZodConstraint(CreateGroupMutationSchema),
-	});
+    lastResult,
+    constraint: getZodConstraint(CreateGroupMutationSchema),
+  });
 
   return (
     <Modal isOpen={props.isOpen} onOpenChange={props.onOpenChange}>
       <ModalContent>
         {(onClose) => (
-          <Form
-            method="post"
-            action={`/groups/create`}
-            {...getFormProps(form)}
-          >
+          <Form method="post" action={`/groups/create`} {...getFormProps(form)}>
             <ModalHeader className="flex flex-col">グループ作成</ModalHeader>
             <ModalBody>
               <Input
                 name={fields.title.name}
                 isRequired={fields.title.required}
                 aria-invalid={fields.title.errors ? true : undefined}
-                aria-describedby={fields.title.errors ? fields.title.errorId : undefined}
+                aria-describedby={
+                  fields.title.errors ? fields.title.errorId : undefined
+                }
                 label="タイトル"
                 placeholder="例）ディズニーランド"
                 variant="bordered"
@@ -61,5 +59,5 @@ export function CreateGroupModal(props: CreateGroupModalProps) {
         )}
       </ModalContent>
     </Modal>
-  )
+  );
 }

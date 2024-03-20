@@ -1,11 +1,23 @@
-import { type ActionFunction, type LoaderFunction, redirect } from "@vercel/remix";
+import {
+  type ActionFunction,
+  type LoaderFunction,
+  redirect,
+} from "@vercel/remix";
 import { Form, useActionData } from "@remix-run/react";
 
 import { getFormProps, getInputProps, useForm } from "@conform-to/react";
 import { GraphQLClient } from "graphql-request";
 import { getZodConstraint, parseWithZod } from "@conform-to/zod";
 
-import { Button, Card, CardBody, CardFooter, CardHeader, Divider, Input } from "@nextui-org/react";
+import {
+  Button,
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  Divider,
+  Input,
+} from "@nextui-org/react";
 
 import { API_URL } from "~/services/constants.server";
 import { AppBar } from "~/components/AppBar";
@@ -15,11 +27,14 @@ import { CreateUserMutationSchema as schema } from "~/lib/form";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const user = await authenticator.isAuthenticated(request, {
-    failureRedirect: '/auth/signin',
+    failureRedirect: "/auth/signin",
   });
 
-  const client = new GraphQLClient(API_URL, { fetch, headers: { authorization: `Bearer ${user.token}` } });
-  const result = await client.request(GetUserDetailQuery, { id: user.id })
+  const client = new GraphQLClient(API_URL, {
+    fetch,
+    headers: { authorization: `Bearer ${user.token}` },
+  });
+  const result = await client.request(GetUserDetailQuery, { id: user.id });
   if (result.user) {
     return redirect(`/`);
   }
@@ -29,17 +44,22 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export const action: ActionFunction = async ({ request }) => {
   const user = await authenticator.isAuthenticated(request, {
-    failureRedirect: '/auth/signin',
+    failureRedirect: "/auth/signin",
   });
 
   const formData = await request.formData();
   const parsedFormData = parseWithZod(formData, { schema });
-  if (parsedFormData.status !== 'success') {
+  if (parsedFormData.status !== "success") {
     return parsedFormData.reply();
   }
 
-  const client = new GraphQLClient(API_URL, { fetch, headers: { authorization: `Bearer ${user.token}` } });
-  const result = await client.request(CreateUserMutation, { input: parsedFormData.value })
+  const client = new GraphQLClient(API_URL, {
+    fetch,
+    headers: { authorization: `Bearer ${user.token}` },
+  });
+  const result = await client.request(CreateUserMutation, {
+    input: parsedFormData.value,
+  });
   if (!result.createUser) {
     throw new Response("Not Found", { status: 404 });
   }
@@ -52,7 +72,7 @@ export default function SignUp() {
   const [form, fields] = useForm({
     lastResult,
     constraint: getZodConstraint(schema),
-  })
+  });
 
   return (
     <>
@@ -72,7 +92,10 @@ export default function SignUp() {
             </CardHeader>
             <Divider />
             <CardBody>
-              <Input {...getInputProps(fields.name, { type: "text" })} label="名前" />
+              <Input
+                {...getInputProps(fields.name, { type: "text" })}
+                label="名前"
+              />
             </CardBody>
             <Divider />
             <CardFooter>
@@ -84,5 +107,5 @@ export default function SignUp() {
         </Form>
       </div>
     </>
-  )
+  );
 }

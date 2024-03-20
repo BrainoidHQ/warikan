@@ -1,16 +1,11 @@
 import { type SerializeFrom } from "@vercel/remix";
 import { useDebounceSubmit } from "remix-utils/use-debounce-submit";
 
-import { type ControlButtonProps } from "@conform-to/dom"
+import { type ControlButtonProps } from "@conform-to/dom";
 import { FieldMetadata } from "@conform-to/react";
 
-import {
-  Button,
-  Input,
-  Select,
-  SelectItem,
-} from "@nextui-org/react";
-import { TrashIcon } from '@radix-ui/react-icons'
+import { Button, Input, Select, SelectItem } from "@nextui-org/react";
+import { TrashIcon } from "@radix-ui/react-icons";
 
 import { GetGroupDetailQuery } from "~/gql/graphql";
 
@@ -24,18 +19,20 @@ export interface AmountInputProps {
     {
       title: string;
       creditors: {
-          user: string;
-          amount: number;
+        user: string;
+        amount: number;
       }[];
       debtors: {
-          user: string;
-          amount: number;
+        user: string;
+        amount: number;
       }[];
     },
     string[]
-  >,
-  participants: SerializeFrom<NonNullable<GetGroupDetailQuery["group"]>["participants"]>,
-  removeButton: ControlButtonProps,
+  >;
+  participants: SerializeFrom<
+    NonNullable<GetGroupDetailQuery["group"]>["participants"]
+  >;
+  removeButton: ControlButtonProps;
 }
 
 export function AmountInput(props: AmountInputProps) {
@@ -62,7 +59,9 @@ export function AmountInput(props: AmountInputProps) {
             debounceTimeout: 0,
           });
         }}
-        defaultSelectedKeys={amount.user.initialValue ? [amount.user.initialValue] : undefined}
+        defaultSelectedKeys={
+          amount.user.initialValue ? [amount.user.initialValue] : undefined
+        }
       >
         {props.participants.map((user) => (
           <SelectItem key={user.id} value={user.name}>
@@ -75,7 +74,9 @@ export function AmountInput(props: AmountInputProps) {
         type="number"
         name={amount.amount.name}
         aria-invalid={amount.amount.errors ? true : undefined}
-        aria-describedby={amount.amount.errors ? amount.amount.errorId : undefined}
+        aria-describedby={
+          amount.amount.errors ? amount.amount.errorId : undefined
+        }
         onChange={(event) => {
           submit(event.target.form, {
             navigate: false,
@@ -109,5 +110,5 @@ export function AmountInput(props: AmountInputProps) {
         <TrashIcon />
       </Button>
     </li>
-  )
+  );
 }

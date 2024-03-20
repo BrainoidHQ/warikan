@@ -8,7 +8,7 @@ import {
   ScrollRestoration,
   useNavigate,
 } from "@remix-run/react";
-import { Analytics } from '@vercel/analytics/react';
+import { Analytics } from "@vercel/analytics/react";
 import stylesheet from "~/tailwind.css?url";
 import { Container } from "~/components/Container";
 
@@ -28,9 +28,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        <NextUIProvider navigate={navigate}>
-          {children}
-        </NextUIProvider>
+        <NextUIProvider navigate={navigate}>{children}</NextUIProvider>
         <ScrollRestoration />
         <Analytics />
         <Scripts />

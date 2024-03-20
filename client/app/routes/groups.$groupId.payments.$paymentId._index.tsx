@@ -1,11 +1,21 @@
-import { useEffect, useRef } from 'react';
-import { type LoaderFunctionArgs, type ActionFunction, json, redirect } from "@vercel/remix";
-import { Form, useActionData, useLoaderData, useRouteLoaderData } from "@remix-run/react";
+import { useEffect, useRef } from "react";
+import {
+  type LoaderFunctionArgs,
+  type ActionFunction,
+  json,
+  redirect,
+} from "@vercel/remix";
+import {
+  Form,
+  useActionData,
+  useLoaderData,
+  useRouteLoaderData,
+} from "@remix-run/react";
 import { useDebounceSubmit } from "remix-utils/use-debounce-submit";
 
 import { SubmissionResult, getFormProps, useForm } from "@conform-to/react";
-import { getZodConstraint, parseWithZod } from '@conform-to/zod';
-import { GraphQLClient } from 'graphql-request';
+import { getZodConstraint, parseWithZod } from "@conform-to/zod";
+import { GraphQLClient } from "graphql-request";
 import invariant from "tiny-invariant";
 
 import {
@@ -17,26 +27,34 @@ import {
   Input,
   useDisclosure,
 } from "@nextui-org/react";
-import { Share2Icon, GearIcon, PlusIcon } from '@radix-ui/react-icons'
+import { Share2Icon, GearIcon, PlusIcon } from "@radix-ui/react-icons";
 
 import { AmountInput } from "~/components/AmountInput";
 import { API_URL } from "~/services/constants.server";
 import { AppBar } from "~/components/AppBar";
-import { authenticator } from '~/services/auth.server';
-import { GetPaymentDetailQuery , UpdatePaymentMutation } from "~/lib/query";
+import { authenticator } from "~/services/auth.server";
+import { GetPaymentDetailQuery, UpdatePaymentMutation } from "~/lib/query";
 import { loader as groupLoader } from "~/routes/groups.$groupId";
 import { UnimplementedModal } from "~/components/UnimplementedModal";
-import { UpdatePaymentMutationDefaultValue, UpdatePaymentMutationSchema } from "~/lib/form";
+import {
+  UpdatePaymentMutationDefaultValue,
+  UpdatePaymentMutationSchema,
+} from "~/lib/form";
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   invariant(params.paymentId, "Missing paymentId param");
 
   const user = await authenticator.isAuthenticated(request, {
-    failureRedirect: '/auth/signin',
+    failureRedirect: "/auth/signin",
   });
 
-  const client = new GraphQLClient(API_URL, { fetch, headers: { authorization: `Bearer ${user.token}` } })
-  const result = await client.request(GetPaymentDetailQuery, { id: params.paymentId })
+  const client = new GraphQLClient(API_URL, {
+    fetch,
+    headers: { authorization: `Bearer ${user.token}` },
+  });
+  const result = await client.request(GetPaymentDetailQuery, {
+    id: params.paymentId,
+  });
   if (!result.payment) {
     throw new Response("Not Found", { status: 404 });
   }
@@ -48,26 +66,37 @@ export const action: ActionFunction = async ({ request, params }) => {
   invariant(params.paymentId, "Missing paymentId param");
 
   const user = await authenticator.isAuthenticated(request, {
-    failureRedirect: '/auth/signin',
+    failureRedirect: "/auth/signin",
   });
 
   const formData = await request.formData();
-  const parsedFormData = parseWithZod(formData, { schema: UpdatePaymentMutationSchema });
-  if (parsedFormData.status !== 'success') {
+  const parsedFormData = parseWithZod(formData, {
+    schema: UpdatePaymentMutationSchema,
+  });
+  if (parsedFormData.status !== "success") {
     return parsedFormData.reply();
   }
 
-  const client = new GraphQLClient(API_URL, { fetch, headers: { authorization: `Bearer ${user.token}` } })
-  const result = await client.request(UpdatePaymentMutation, { input: { id: params.paymentId, ...parsedFormData.value } })
+  const client = new GraphQLClient(API_URL, {
+    fetch,
+    headers: { authorization: `Bearer ${user.token}` },
+  });
+  const result = await client.request(UpdatePaymentMutation, {
+    input: { id: params.paymentId, ...parsedFormData.value },
+  });
   if (!result.updatePayment) {
     throw new Response("Not Found", { status: 404 });
   }
 
-  return redirect(`/groups/${params.groupId}/payments/${result.updatePayment.id}`);
+  return redirect(
+    `/groups/${params.groupId}/payments/${result.updatePayment.id}`,
+  );
 };
 
 export default function PaymentDetail() {
-  const groupLoaderData = useRouteLoaderData<typeof groupLoader>("routes/groups.$groupId");
+  const groupLoaderData = useRouteLoaderData<typeof groupLoader>(
+    "routes/groups.$groupId",
+  );
   invariant(groupLoaderData?.group, "Missing data");
   const group = groupLoaderData.group;
 
@@ -78,7 +107,8 @@ export default function PaymentDetail() {
   const formRef = useRef<HTMLFormElement>(null);
   const submit = useDebounceSubmit();
   // TODO: improve type annotation
-  const lastResult: SubmissionResult<string[]> | null | undefined = useActionData<typeof action>();
+  const lastResult: SubmissionResult<string[]> | null | undefined =
+    useActionData<typeof action>();
   const [form, fields] = useForm({
     lastResult,
     constraint: getZodConstraint(UpdatePaymentMutationSchema),
@@ -92,12 +122,12 @@ export default function PaymentDetail() {
         navigate: false,
         fetcherKey: form.id,
         debounceTimeout: 0,
-      })
+      });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formRef, lastResult, form.initialValue])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formRef, lastResult, form.initialValue]);
 
-  const {isOpen, onOpen, onOpenChange} = useDisclosure();
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   return (
     <>
@@ -105,7 +135,10 @@ export default function PaymentDetail() {
         breadcrumbs={[
           { label: "ホーム", href: `/` },
           { label: group.title, href: `/groups/${group.id}` },
-          { label: payment.title, href: `/groups/${group.id}/payments/${payment.id}` },
+          {
+            label: payment.title,
+            href: `/groups/${group.id}/payments/${payment.id}`,
+          },
         ]}
         buttons={[
           { label: "共有", icon: <Share2Icon />, onPress: onOpen },
@@ -113,11 +146,18 @@ export default function PaymentDetail() {
         ]}
       />
 
-      <Form method="post" {...getFormProps(form)} className="flex flex-col gap-4" ref={formRef}>
+      <Form
+        method="post"
+        {...getFormProps(form)}
+        className="flex flex-col gap-4"
+        ref={formRef}
+      >
         <Input
           name={fields.title.name}
           aria-invalid={fields.title.errors ? true : undefined}
-					aria-describedby={fields.title.errors ? fields.title.errorId : undefined}
+          aria-describedby={
+            fields.title.errors ? fields.title.errorId : undefined
+          }
           onChange={(event) => {
             submit(event.target.form, {
               navigate: false,
@@ -205,10 +245,7 @@ export default function PaymentDetail() {
         </Card>
       </Form>
 
-      <UnimplementedModal
-        isOpen={isOpen}
-        onOpenChange={onOpenChange}
-      />
+      <UnimplementedModal isOpen={isOpen} onOpenChange={onOpenChange} />
     </>
   );
 }

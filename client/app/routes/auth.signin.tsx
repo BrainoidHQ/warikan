@@ -23,9 +23,11 @@ export default function SignIn() {
 
       <div className="flex flex-col gap-4">
         <Form method="post">
-          <Button color="primary" type="submit">サインイン</Button>
+          <Button color="primary" type="submit">
+            サインイン
+          </Button>
         </Form>
       </div>
     </>
-  )
+  );
 }

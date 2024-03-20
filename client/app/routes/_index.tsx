@@ -2,7 +2,7 @@ import { type LoaderFunctionArgs, json, redirect } from "@vercel/remix";
 import { useLoaderData } from "@remix-run/react";
 
 import { compareDesc, format } from "date-fns";
-import { GraphQLClient } from 'graphql-request';
+import { GraphQLClient } from "graphql-request";
 
 import {
   Button,
@@ -14,24 +14,27 @@ import {
   ListboxItem,
   useDisclosure,
 } from "@nextui-org/react";
-import { GearIcon, PlusIcon } from '@radix-ui/react-icons'
+import { GearIcon, PlusIcon } from "@radix-ui/react-icons";
 
 import { API_URL } from "~/services/constants.server";
 import { AppBar } from "~/components/AppBar";
-import { authenticator } from '~/services/auth.server';
+import { authenticator } from "~/services/auth.server";
 import { CreateGroupModal } from "~/components/CreateGroupModal";
 import { GetUserDetailQuery } from "~/lib/query";
 import { UnimplementedModal } from "~/components/UnimplementedModal";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const user = await authenticator.isAuthenticated(request, {
-    failureRedirect: '/auth/signin',
+    failureRedirect: "/auth/signin",
   });
 
-  const client = new GraphQLClient(API_URL, { fetch, headers: { authorization: `Bearer ${user.token}` } })
-  const result = await client.request(GetUserDetailQuery, { id: user.id })
+  const client = new GraphQLClient(API_URL, {
+    fetch,
+    headers: { authorization: `Bearer ${user.token}` },
+  });
+  const result = await client.request(GetUserDetailQuery, { id: user.id });
   if (!result.user) {
-    return redirect(`/auth/signup`)
+    return redirect(`/auth/signup`);
   }
   if (!result.groups) {
     throw new Response("Not Found", { status: 404 });
@@ -46,20 +49,18 @@ export default function App() {
   const {
     isOpen: isSettingModalOpen,
     onOpen: onSettingModalOpen,
-    onOpenChange: onSettingModalOpenChange
+    onOpenChange: onSettingModalOpenChange,
   } = useDisclosure();
   const {
     isOpen: isCreateGroupModalOpen,
     onOpen: onCreateGroupModalOpen,
-    onOpenChange: onCreateGroupModalOpenChange
+    onOpenChange: onCreateGroupModalOpenChange,
   } = useDisclosure();
 
   return (
     <>
       <AppBar
-        breadcrumbs={[
-          { label: "ホーム", href: `/` },
-        ]}
+        breadcrumbs={[{ label: "ホーム", href: `/` }]}
         buttons={[
           { label: "設定", icon: <GearIcon />, onPress: onSettingModalOpen },
         ]}
@@ -69,27 +70,35 @@ export default function App() {
         <Card shadow="sm">
           <CardHeader className="justify-between">
             <h3>グループ一覧</h3>
-            <Button isIconOnly size="sm" variant="bordered" color="primary" onPress={onCreateGroupModalOpen}>
+            <Button
+              isIconOnly
+              size="sm"
+              variant="bordered"
+              color="primary"
+              onPress={onCreateGroupModalOpen}
+            >
               <PlusIcon />
             </Button>
           </CardHeader>
           <Divider />
           <CardBody>
             <Listbox>
-              {
-                groups
-                  .groups
-                  .sort((a, b) => compareDesc(new Date(a.createdAt), new Date(b.createdAt)))
-                  .map((group) => (
-                    <ListboxItem
-                      key={group.id}
-                      href={`/groups/${group.id}`}
-                      description={format(new Date(group.createdAt), "yyyy年MM月dd日")}
-                    >
-                      {group.title}
-                    </ListboxItem>
-                  ))
-              }
+              {groups.groups
+                .sort((a, b) =>
+                  compareDesc(new Date(a.createdAt), new Date(b.createdAt)),
+                )
+                .map((group) => (
+                  <ListboxItem
+                    key={group.id}
+                    href={`/groups/${group.id}`}
+                    description={format(
+                      new Date(group.createdAt),
+                      "yyyy年MM月dd日",
+                    )}
+                  >
+                    {group.title}
+                  </ListboxItem>
+                ))}
             </Listbox>
           </CardBody>
         </Card>

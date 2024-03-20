@@ -1,6 +1,6 @@
-import { type SerializeFrom } from "@vercel/remix"
-import { z } from 'zod';
-import { GetPaymentDetailQuery } from '~/gql/graphql';
+import { type SerializeFrom } from "@vercel/remix";
+import { z } from "zod";
+import { GetPaymentDetailQuery } from "~/gql/graphql";
 
 export const CreateUserMutationSchema = z.object({
   name: z.string(),
@@ -16,17 +16,19 @@ export const UpdatePaymentMutationSchema = z.object({
     z.object({
       user: z.string(),
       amount: z.number(),
-    })
+    }),
   ),
   debtors: z.array(
     z.object({
       user: z.string(),
       amount: z.number(),
-    })
+    }),
   ),
 });
 
-export const UpdatePaymentMutationDefaultValue = (value: SerializeFrom<NonNullable<GetPaymentDetailQuery["payment"]>>) => ({
+export const UpdatePaymentMutationDefaultValue = (
+  value: SerializeFrom<NonNullable<GetPaymentDetailQuery["payment"]>>,
+) => ({
   title: value.title,
   creditors: value.creditors.map((creditor) => ({
     user: creditor.user.id,

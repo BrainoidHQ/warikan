@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { type PressEvent } from '@react-types/shared';
+import { type PressEvent } from "@react-types/shared";
 
 import {
   BreadcrumbItem,
@@ -12,19 +12,19 @@ import {
 } from "@nextui-org/react";
 
 export interface AppBarBreadcrumbItem {
-  label: string
-  href: string
+  label: string;
+  href: string;
 }
 
 export interface AppBarButtonItem {
-  label: string,
-  icon: ReactNode,
-  onPress: (e: PressEvent) => void
+  label: string;
+  icon: ReactNode;
+  onPress: (e: PressEvent) => void;
 }
 
 export interface AppBarProps {
-  breadcrumbs: AppBarBreadcrumbItem[]
-  buttons: AppBarButtonItem[]
+  breadcrumbs: AppBarBreadcrumbItem[];
+  buttons: AppBarButtonItem[];
 }
 
 export function AppBar(props: AppBarProps) {
@@ -49,5 +49,5 @@ export function AppBar(props: AppBarProps) {
         ))}
       </NavbarContent>
     </Navbar>
-  )
+  );
 }

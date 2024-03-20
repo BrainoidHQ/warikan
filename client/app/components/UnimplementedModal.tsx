@@ -1,13 +1,8 @@
-import {
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalHeader,
-} from "@nextui-org/react";
+import { Modal, ModalBody, ModalContent, ModalHeader } from "@nextui-org/react";
 
 export interface UnimplementedModalProps {
-  isOpen: boolean,
-  onOpenChange: () => void,
+  isOpen: boolean;
+  onOpenChange: () => void;
 }
 
 export function UnimplementedModal(props: UnimplementedModalProps) {
@@ -24,5 +19,5 @@ export function UnimplementedModal(props: UnimplementedModalProps) {
         )}
       </ModalContent>
     </Modal>
-  )
+  );
 }
