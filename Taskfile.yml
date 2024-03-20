@@ -12,6 +12,11 @@ tasks:
       - npm run typecheck
       - npm run lint
 
+  client:fmt:
+    dir: 'client'
+    cmds:
+      - npm run fmt
+
   server:dev:
     dir: 'server'
     cmds:
