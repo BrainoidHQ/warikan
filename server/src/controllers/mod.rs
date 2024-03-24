@@ -38,7 +38,6 @@ pub async fn graphql(
     auth: AuthState,
     req: GraphQLRequest,
 ) -> GraphQLResponse {
-    dbg!(&auth);
     let req = req.into_inner().data(auth);
     state.schema.execute(req).await.into()
 }

@@ -167,26 +167,26 @@ async fn scenario_simple() {
     };
 
     // -------------------------------------------------------------------------
-    // 5. read group
+    // 5. read groups
     // -------------------------------------------------------------------------
 
     let query = indoc! {r#"
-        query GetGroup($id: ID!) {
-            group(id: $id) {
-                title
+        query GetGroups($id: ID!) {
+            groups(id: $id) {
+                id
             }
         }
     "#};
     let vars = Variables::from_json(json!({
-        "id": &group_id,
+        "id": &sub,
     }));
 
     let req = Request::new(query).variables(vars);
     let res = schema.execute(req).await;
 
     if let Value::Object(data) = res.data {
-        if let Value::Object(ref group) = data["group"] {
-            assert_eq!(group["title"], Value::String("group".to_string()));
+        if let Value::List(ref groups) = data["groups"] {
+            assert_eq!(groups.len(), 1);
         } else {
             unreachable!();
         }
@@ -322,7 +322,59 @@ async fn scenario_simple() {
     }
 
     // -------------------------------------------------------------------------
-    // 10. delete payment
+    // 10. read group
+    // -------------------------------------------------------------------------
+
+    let query = indoc! {r#"
+        query GetGroup($id: ID!) {
+            group(id: $id) {
+                participants {
+                    id
+                }
+                payments {
+                    id
+                }
+            }
+        }
+    "#};
+    let vars = Variables::from_json(json!({
+        "id": &group_id,
+    }));
+
+    let req = Request::new(query).variables(vars);
+    let res = schema.execute(req).await;
+
+    if let Value::Object(data) = res.data {
+        if let Value::Object(ref group) = data["group"] {
+            if let Value::List(ref participants) = group["participants"] {
+                assert_eq!(participants.len(), 1);
+                if let Value::Object(ref participant) = participants[0] {
+                    assert_eq!(participant["id"], Value::String(sub.to_string()));
+                } else {
+                    unreachable!();
+                }
+            } else {
+                unreachable!();
+            }
+            if let Value::List(ref payments) = group["payments"] {
+                assert_eq!(payments.len(), 1);
+                if let Value::Object(ref payment) = payments[0] {
+                    assert_eq!(payment["id"], Value::String(payment_id.to_string()));
+                } else {
+                    unreachable!();
+                }
+            } else {
+                unreachable!();
+            }
+        } else {
+            unreachable!();
+        }
+    } else {
+        unreachable!();
+    }
+
+    // -------------------------------------------------------------------------
+    // 11. delete payment
     // -------------------------------------------------------------------------
 
     let query = indoc! {r#"
@@ -346,7 +398,7 @@ async fn scenario_simple() {
     }
 
     // -------------------------------------------------------------------------
-    // 11. delete group
+    // 12. delete group
     // -------------------------------------------------------------------------
 
     let query = indoc! {r#"
@@ -370,7 +422,7 @@ async fn scenario_simple() {
     }
 
     // -------------------------------------------------------------------------
-    // 12. delete user
+    // 13. delete user
     // -------------------------------------------------------------------------
 
     let query = indoc! {r#"
