@@ -3,9 +3,7 @@ mod notification;
 mod payment;
 mod user;
 
-use crate::repositories::Repository;
 use mongodb::{Client, Database};
-use shaku::Component;
 use thiserror::Error;
 
 pub const MONGO_COLLECTION_GROUPS: &str = "groups";
@@ -13,8 +11,7 @@ pub const MONGO_COLLECTION_NOTIFICATIONS: &str = "notifications";
 pub const MONGO_COLLECTION_PAYMENTS: &str = "payments";
 pub const MONGO_COLLECTION_USERS: &str = "users";
 
-#[derive(Debug, Component)]
-#[shaku(interface = Repository)]
+#[derive(Debug)]
 pub struct MongoRepository {
     pub database: Database,
 }
@@ -47,5 +44,66 @@ impl MongoRepository {
         self.create_user_index().await?;
 
         Ok(())
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::repositories::{
+        GroupRepositoryTester, NotificationRepositoryTester, PaymentRepositoryTester,
+        UserRepositoryTester,
+    };
+
+    #[tokio::test]
+    async fn test_mongo_group_repository() {
+        GroupRepositoryTester::test(
+            MongoRepository::new(MongoRepositoryConfig {
+                uri: "mongodb://localhost:27017",
+                database: "warikan",
+            })
+            .await
+            .unwrap(),
+        )
+        .await;
+    }
+
+    #[tokio::test]
+    async fn test_mongo_notification_repository() {
+        NotificationRepositoryTester::test(
+            MongoRepository::new(MongoRepositoryConfig {
+                uri: "mongodb://localhost:27017",
+                database: "warikan",
+            })
+            .await
+            .unwrap(),
+        )
+        .await;
+    }
+
+    #[tokio::test]
+    async fn test_mongo_payment_repository() {
+        PaymentRepositoryTester::test(
+            MongoRepository::new(MongoRepositoryConfig {
+                uri: "mongodb://localhost:27017",
+                database: "warikan",
+            })
+            .await
+            .unwrap(),
+        )
+        .await;
+    }
+
+    #[tokio::test]
+    async fn test_mongo_user_repository() {
+        UserRepositoryTester::test(
+            MongoRepository::new(MongoRepositoryConfig {
+                uri: "mongodb://localhost:27017",
+                database: "warikan",
+            })
+            .await
+            .unwrap(),
+        )
+        .await;
     }
 }
