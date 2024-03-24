@@ -46,3 +46,64 @@ impl MongoRepository {
         Ok(())
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::repositories::{
+        GroupRepositoryTester, NotificationRepositoryTester, PaymentRepositoryTester,
+        UserRepositoryTester,
+    };
+
+    #[tokio::test]
+    async fn test_mongo_group_repository() {
+        GroupRepositoryTester::test(
+            MongoRepository::new(MongoRepositoryConfig {
+                uri: "mongodb://localhost:27017",
+                database: "warikan",
+            })
+            .await
+            .unwrap(),
+        )
+        .await;
+    }
+
+    #[tokio::test]
+    async fn test_mongo_notification_repository() {
+        NotificationRepositoryTester::test(
+            MongoRepository::new(MongoRepositoryConfig {
+                uri: "mongodb://localhost:27017",
+                database: "warikan",
+            })
+            .await
+            .unwrap(),
+        )
+        .await;
+    }
+
+    #[tokio::test]
+    async fn test_mongo_payment_repository() {
+        PaymentRepositoryTester::test(
+            MongoRepository::new(MongoRepositoryConfig {
+                uri: "mongodb://localhost:27017",
+                database: "warikan",
+            })
+            .await
+            .unwrap(),
+        )
+        .await;
+    }
+
+    #[tokio::test]
+    async fn test_mongo_user_repository() {
+        UserRepositoryTester::test(
+            MongoRepository::new(MongoRepositoryConfig {
+                uri: "mongodb://localhost:27017",
+                database: "warikan",
+            })
+            .await
+            .unwrap(),
+        )
+        .await;
+    }
+}
