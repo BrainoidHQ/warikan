@@ -3,9 +3,7 @@ mod notification;
 mod payment;
 mod user;
 
-use crate::repositories::Repository;
 use mongodb::{Client, Database};
-use shaku::Component;
 use thiserror::Error;
 
 pub const MONGO_COLLECTION_GROUPS: &str = "groups";
@@ -13,8 +11,7 @@ pub const MONGO_COLLECTION_NOTIFICATIONS: &str = "notifications";
 pub const MONGO_COLLECTION_PAYMENTS: &str = "payments";
 pub const MONGO_COLLECTION_USERS: &str = "users";
 
-#[derive(Debug, Component)]
-#[shaku(interface = Repository)]
+#[derive(Debug)]
 pub struct MongoRepository {
     pub database: Database,
 }

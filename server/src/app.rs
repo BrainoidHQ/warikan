@@ -7,18 +7,13 @@ use crate::{
 use async_graphql::{EmptySubscription, Schema};
 use axum::{routing::get, Router};
 use clap::Parser;
-use shaku::{module, HasComponent};
-use std::net::{IpAddr, Ipv4Addr, SocketAddr};
+use std::{
+    net::{IpAddr, Ipv4Addr, SocketAddr},
+    sync::Arc,
+};
 use thiserror::Error;
 use tokio::net::TcpListener;
 use url::Url;
-
-module! {
-    pub Module {
-        components = [MongoRepository],
-        providers = [],
-    }
-}
 
 #[derive(Debug, Parser)]
 pub struct Args {
@@ -81,13 +76,8 @@ impl App {
         })
         .await?;
 
-        // Module
-        let module = Module::builder()
-            .with_component_override(Box::new(mongo))
-            .build();
-
         // UseCase
-        let usecase = UseCase::new(module.resolve());
+        let usecase = UseCase::new(Arc::new(mongo));
 
         // GraphQL
         let schema = Schema::build(Query::default(), Mutation::default(), EmptySubscription)

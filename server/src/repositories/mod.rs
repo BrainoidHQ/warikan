@@ -7,7 +7,6 @@ use crate::entities::{
     Group, GroupID, Notification, NotificationID, Payment, PaymentID, User, UserID,
 };
 use async_trait::async_trait;
-use shaku::Interface;
 
 #[cfg(test)]
 use mockall::predicate::*;
@@ -16,18 +15,19 @@ use mockall::*;
 
 #[async_trait]
 pub trait Repository:
-    GroupRepository + NotificationRepository + PaymentRepository + UserRepository
+    GroupRepository + NotificationRepository + PaymentRepository + UserRepository + Send + Sync
 {
 }
 
-impl<T: GroupRepository + NotificationRepository + PaymentRepository + UserRepository> Repository
-    for T
+impl<
+        T: GroupRepository + NotificationRepository + PaymentRepository + UserRepository + Send + Sync,
+    > Repository for T
 {
 }
 
 #[async_trait]
 #[cfg_attr(test, automock)]
-pub trait GroupRepository: Interface {
+pub trait GroupRepository: Send + Sync {
     async fn create_group(
         &self,
         group: Group,
@@ -56,7 +56,7 @@ pub trait GroupRepository: Interface {
 
 #[async_trait]
 #[cfg_attr(test, automock)]
-pub trait NotificationRepository: Interface {
+pub trait NotificationRepository: Send + Sync {
     async fn create_notification(
         &self,
         notification: Notification,
@@ -80,7 +80,7 @@ pub trait NotificationRepository: Interface {
 
 #[async_trait]
 #[cfg_attr(test, automock)]
-pub trait PaymentRepository: Interface {
+pub trait PaymentRepository: Send + Sync {
     async fn create_payment(
         &self,
         payment: Payment,
@@ -109,7 +109,7 @@ pub trait PaymentRepository: Interface {
 
 #[async_trait]
 #[cfg_attr(test, automock)]
-pub trait UserRepository: Interface {
+pub trait UserRepository: Send + Sync {
     async fn create_user(
         &self,
         user: User,
