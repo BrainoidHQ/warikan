@@ -1,5 +1,7 @@
-#[cfg(feature = "mongodb")] mod mongo;
-#[cfg(feature = "mongodb")] pub use mongo::*;
+#[cfg(feature = "mongodb")]
+mod mongo;
+#[cfg(feature = "mongodb")]
+pub use mongo::*;
 
 use crate::entities::{
     Group, GroupID, Notification, NotificationID, Payment, PaymentID, User, UserID,
