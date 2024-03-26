@@ -7,7 +7,7 @@ repository = "https://github.com/yoseio/warikan.git"
 license = "MIT"
 
 [features]
-default = [ "mongodb" ]
+default = [ "mongodb", "firestore" ]
 
 [dependencies]
 async-graphql = { version = "7.0", features = ["chrono"] }
@@ -18,7 +18,9 @@ axum-extra = { version = "0.9", features = ["typed-header"] }
 chrono = { version = "0.4", features = ["serde"] }
 clap = { version = "4.4", features = ["derive", "env"] }
 dotenvy = "0.15"
+firestore = { version = "0.39", optional = true }
 futures = "0.3"
+itertools = "0.12"
 jsonwebtoken = "9.0"
 mongodb = { version = "2.8", features = ["tokio-runtime"], optional = true }
 nanoid = "0.4"

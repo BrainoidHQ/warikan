@@ -18,6 +18,8 @@ tasks:
       - cargo watch -x run
 
   server:test:
+    env:
+      FIRESTORE_EMULATOR_HOST: localhost:10000
     cmds:
       - cargo llvm-cov nextest --html --all --no-fail-fast
 

@@ -25,6 +25,11 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
+    services:
+      firestore:
+        image: ghcr.io/brainoidhq/firestore-emulator:main
+        ports:
+          - 10000:8080
     steps:
     - uses: actions/checkout@v4
     - uses: dtolnay/rust-toolchain@stable
@@ -35,6 +40,8 @@ jobs:
     - uses: taiki-e/install-action@cargo-llvm-cov
     - uses: supercharge/mongodb-github-action@1.10.0
     - run: cargo llvm-cov nextest --lcov --output-path lcov.info
+      env:
+        FIRESTORE_EMULATOR_HOST: localhost:10000
     - uses: codecov/codecov-action@v3
       with:
         files: lcov.info

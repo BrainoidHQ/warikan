@@ -1,7 +1,8 @@
-use crate::entities::{GroupID, UserID};
+use crate::entities::{GroupID, Node, UserID};
 use async_graphql::{types::ID, NewType};
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
+use std::cmp::Ordering;
 
 #[cfg(test)]
 use fake::{Dummy, Faker};
@@ -20,6 +21,12 @@ impl PaymentID {
 impl ToString for PaymentID {
     fn to_string(&self) -> String {
         self.0 .0.to_string()
+    }
+}
+
+impl AsRef<str> for PaymentID {
+    fn as_ref(&self) -> &str {
+        &self.0 .0
     }
 }
 
@@ -43,6 +50,38 @@ pub struct Payment {
     pub debtors: Vec<Amount>,
 
     pub group: GroupID,
+}
+
+impl<'a> Node<'a> for Payment {
+    fn id(&self) -> &str {
+        self.id.as_ref()
+    }
+
+    fn created_at(&self) -> &DateTime<Utc> {
+        &self.created_at
+    }
+
+    fn updated_at(&self) -> &DateTime<Utc> {
+        &self.updated_at
+    }
+}
+
+impl PartialOrd for Payment {
+    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
+impl Ord for Payment {
+    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+        let id_order = self.id.cmp(&other.id);
+        let updated_at_order = self.updated_at.cmp(&other.updated_at);
+
+        match updated_at_order {
+            Ordering::Equal => id_order,
+            _ => updated_at_order,
+        }
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]

@@ -6,6 +6,7 @@ use crate::{
 };
 use async_trait::async_trait;
 use futures::TryStreamExt;
+use itertools::Itertools;
 use mongodb::{
     bson::{doc, Bson},
     options::IndexOptions,
@@ -89,7 +90,14 @@ impl PaymentRepository for MongoRepository {
         let payments: Collection<Payment> = self.database.collection(MONGO_COLLECTION_PAYMENTS);
 
         let filter = doc! { "group": group };
-        let result = payments.find(filter, None).await?.try_collect().await?;
+        let result = payments
+            .find(filter, None)
+            .await?
+            .try_collect::<Vec<Payment>>()
+            .await?
+            .into_iter()
+            .sorted()
+            .collect();
 
         Ok(result)
     }
