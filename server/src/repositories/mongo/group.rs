@@ -6,6 +6,7 @@ use crate::{
 };
 use async_trait::async_trait;
 use futures::stream::TryStreamExt;
+use itertools::Itertools;
 use mongodb::{
     bson::{doc, Bson},
     options::IndexOptions,
@@ -89,7 +90,14 @@ impl GroupRepository for MongoRepository {
         let groups: Collection<Group> = self.database.collection(MONGO_COLLECTION_GROUPS);
 
         let filter = doc! { "participants": id };
-        let result = groups.find(filter, None).await?.try_collect().await?;
+        let result = groups
+            .find(filter, None)
+            .await?
+            .try_collect::<Vec<Group>>()
+            .await?
+            .into_iter()
+            .sorted()
+            .collect();
 
         Ok(result)
     }

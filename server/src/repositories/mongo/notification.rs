@@ -7,6 +7,7 @@ use crate::{
 };
 use async_trait::async_trait;
 use futures::TryStreamExt;
+use itertools::Itertools;
 use mongodb::{
     bson::{doc, Bson},
     options::IndexOptions,
@@ -84,8 +85,11 @@ impl NotificationRepository for MongoRepository {
         let result = notifications
             .find(filter, None)
             .await?
-            .try_collect()
-            .await?;
+            .try_collect::<Vec<Notification>>()
+            .await?
+            .into_iter()
+            .sorted()
+            .collect();
 
         Ok(result)
     }

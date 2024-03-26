@@ -1,3 +1,8 @@
+#[cfg(feature = "firestore")]
+mod firestore;
+#[cfg(feature = "firestore")]
+pub use firestore::*;
+
 #[cfg(feature = "mongodb")]
 mod mongo;
 #[cfg(feature = "mongodb")]
@@ -10,6 +15,8 @@ use async_trait::async_trait;
 
 #[cfg(test)]
 use fake::{Fake, Faker};
+#[cfg(test)]
+use itertools::Itertools;
 #[cfg(test)]
 use mockall::predicate::*;
 #[cfg(test)]
@@ -302,7 +309,13 @@ impl<R: GroupRepository> GroupRepositoryTester<R> {
 
         let groups = self.repository.get_groups_by_user(&user).await.unwrap();
 
-        assert_eq!(groups, vec![group1, group2]);
+        assert_eq!(
+            groups,
+            vec![group1, group2]
+                .into_iter()
+                .sorted()
+                .collect::<Vec<_>>()
+        );
     }
 }
 
@@ -378,7 +391,13 @@ impl<R: NotificationRepository> NotificationRepositoryTester<R> {
             .await
             .unwrap();
 
-        assert_eq!(vec![notification1, notification2], get);
+        assert_eq!(
+            get,
+            vec![notification1, notification2]
+                .into_iter()
+                .sorted()
+                .collect::<Vec<_>>()
+        );
     }
 }
 
@@ -452,7 +471,13 @@ impl<R: PaymentRepository> PaymentRepositoryTester<R> {
 
         let get = self.repository.get_payments_by_group(&group).await.unwrap();
 
-        assert_eq!(vec![payment1, payment2], get);
+        assert_eq!(
+            get,
+            vec![payment1, payment2]
+                .into_iter()
+                .sorted()
+                .collect::<Vec<_>>()
+        );
     }
 }
 
