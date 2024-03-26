@@ -19,7 +19,7 @@ tasks:
 
   server:test:
     env:
-      FIRESTORE_EMULATOR_HOST: 127.0.0.1:10000
+      FIRESTORE_EMULATOR_HOST: localhost:10000
     cmds:
       - cargo llvm-cov nextest --html --all --no-fail-fast
 

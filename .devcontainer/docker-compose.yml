@@ -10,7 +10,7 @@ services:
       - ../..:/workspaces:cached
 
   firestore:
-    image: google/cloud-sdk
+    image: google/cloud-sdk:latest
     network_mode: service:app
     restart: unless-stopped
     command:
