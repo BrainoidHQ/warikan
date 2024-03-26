@@ -63,20 +63,13 @@ impl<'a> Node<'a> for Group {
     }
 }
 
-impl<'a> PartialOrd for Group {
+impl PartialOrd for Group {
     fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
-        let id_order = self.id.partial_cmp(&other.id);
-        let updated_at_order = self.updated_at.partial_cmp(&other.updated_at);
-
-        match updated_at_order {
-            None => id_order,
-            Some(Ordering::Equal) => id_order,
-            _ => updated_at_order,
-        }
+        Some(self.cmp(other))
     }
 }
 
-impl<'a> Ord for Group {
+impl Ord for Group {
     fn cmp(&self, other: &Self) -> std::cmp::Ordering {
         let id_order = self.id.cmp(&other.id);
         let updated_at_order = self.updated_at.cmp(&other.updated_at);

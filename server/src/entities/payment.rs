@@ -66,20 +66,13 @@ impl<'a> Node<'a> for Payment {
     }
 }
 
-impl<'a> PartialOrd for Payment {
+impl PartialOrd for Payment {
     fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
-        let id_order = self.id.partial_cmp(&other.id);
-        let updated_at_order = self.updated_at.partial_cmp(&other.updated_at);
-
-        match updated_at_order {
-            None => id_order,
-            Some(Ordering::Equal) => id_order,
-            _ => updated_at_order,
-        }
+        Some(self.cmp(other))
     }
 }
 
-impl<'a> Ord for Payment {
+impl Ord for Payment {
     fn cmp(&self, other: &Self) -> std::cmp::Ordering {
         let id_order = self.id.cmp(&other.id);
         let updated_at_order = self.updated_at.cmp(&other.updated_at);
